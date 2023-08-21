@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useImperativeHandle, useEffect } from 'react';
 import { PiTrashSimpleLight } from 'react-icons/pi';
 import { HiMiniBars2 } from 'react-icons/hi2';
 import './EditingCard.css'
@@ -12,7 +12,6 @@ function setFocusAtEnd(e: React.FocusEvent<HTMLDivElement>) {
   if (!selection) return;
 
   if (contentEditableElement.lastChild && contentEditableElement.lastChild.textContent) {
-    // Using type assertion here since we've checked its existence
     range.setStart(contentEditableElement.lastChild as Node, contentEditableElement.lastChild.textContent.length);
   } else {
     range.setStart(contentEditableElement, 0);
@@ -26,10 +25,21 @@ function setFocusAtEnd(e: React.FocusEvent<HTMLDivElement>) {
 type EditingCardProps = {
   number: number;
   isLast?: boolean;
+  isNewest?: boolean;
   onTabInLastCard?: () => void;
+  onRemoveCard?: () => void;  
 };
 
-function EditingCard({ number, isLast, onTabInLastCard }: EditingCardProps) {
+function EditingCard({ number, isLast, onTabInLastCard, isNewest, onRemoveCard  }: EditingCardProps) {
+
+  const editableRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isNewest) {
+      editableRef.current?.focus();
+    }
+  }, [isNewest]);
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (isLast && e.key === 'Tab') {
       e.preventDefault();
@@ -44,7 +54,7 @@ function EditingCard({ number, isLast, onTabInLastCard }: EditingCardProps) {
           <h4>{number}</h4>
           <div>
             <button tabIndex={-1}><HiMiniBars2 /></button>
-            <button tabIndex={-1}><PiTrashSimpleLight /></button>
+            <button tabIndex={-1} onClick={onRemoveCard} ><PiTrashSimpleLight /></button>
           </div>
         </div>
 
@@ -52,6 +62,7 @@ function EditingCard({ number, isLast, onTabInLastCard }: EditingCardProps) {
 
           <div className='ec-term-container'>
             <div
+              ref={editableRef}
               className="editable-box"
               contentEditable={true}
               role="textbox"

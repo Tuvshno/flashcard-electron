@@ -67,3 +67,27 @@
 .ec-toolbar button {
   padding: 0.5rem;
 }
+
+.ec-add-card {
+  padding: 2rem;
+  display: flex;
+  cursor: pointer;
+}
+
+
+.ec-add-card p {
+  transition: all .25s ease;
+  margin: auto;
+  padding-bottom: 5px;
+  width: fit-content;
+  font-weight: 700;
+  border-bottom: 5px solid rgb(14, 224, 235);
+  display: inline-block;
+  text-decoration: none;
+}
+
+.ec-add-card:hover > p {
+  color: rgb(255, 187, 0);
+  border-bottom: 5px solid rgb(255, 187, 0);
+
+}
