@@ -1,0 +1,9 @@
+.editing-card-container {
+  width: 70vw;
+  margin-top: 40px;
+  /* background-color: aqua; */
+}
+
+.editing-create-button {
+  background-color: rgb(0, 251, 255);
+}

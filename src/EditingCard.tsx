@@ -1,7 +1,7 @@
-import React, { useRef, useImperativeHandle, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { PiTrashSimpleLight } from 'react-icons/pi';
 import { HiMiniBars2 } from 'react-icons/hi2';
-import './EditingCard.css'
+import './EditingCard.css';
 import { useDrag, useDrop } from 'react-dnd';
 
 function setFocusAtEnd(e: React.FocusEvent<HTMLDivElement>) {
@@ -27,24 +27,39 @@ type EditingCardProps = {
   isLast?: boolean;
   isNewest?: boolean;
   onTabInLastCard?: () => void;
-  onRemoveCard?: () => void;  
+  onRemoveCard?: () => void;
   index: number;
   moveCard: (dragIndex: number, hoverIndex: number) => void;
-
+  term: string;
+  definition: string;
+  onUpdateTerm: (term: string) => void;
+  onUpdateDefinition: (definition: string) => void;
 };
 
-function EditingCard({ number, isLast, onTabInLastCard, isNewest, onRemoveCard, index, moveCard }: EditingCardProps) {
+function EditingCard({
+  number,
+  isLast,
+  onTabInLastCard,
+  isNewest,
+  onRemoveCard,
+  index,
+  moveCard,
+  term,
+  definition,
+  onUpdateTerm,
+  onUpdateDefinition
+}: EditingCardProps) {
 
   const editableRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
+  const hasFocused = useRef(false);
 
   useEffect(() => {
     if (isNewest) {
-      editableRef.current?.focus();
+      ref.current?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [isNewest]);
-
-  const ref = useRef<HTMLDivElement>(null);
-
+  
   const [, drop] = useDrop({
     accept: 'CARD',
     hover: (item: { type: string; index: number }) => {
@@ -63,17 +78,18 @@ function EditingCard({ number, isLast, onTabInLastCard, isNewest, onRemoveCard, 
     }),
   });
 
-  drag(drop(ref));  
-  
+  drag(drop(ref));
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (isLast && e.key === 'Tab') {
       e.preventDefault();
       onTabInLastCard && onTabInLastCard();
     }
   };
+
+
   return (
     <>
-
       <div ref={ref} style={{ opacity: isDragging ? 0.5 : 1 }} className="ec-container">
         <div className='ec-toolbar'>
           <h4>{number}</h4>
@@ -84,7 +100,6 @@ function EditingCard({ number, isLast, onTabInLastCard, isNewest, onRemoveCard, 
         </div>
 
         <div className='ec-info-container'>
-
           <div className='ec-term-container'>
             <div
               ref={editableRef}
@@ -92,10 +107,10 @@ function EditingCard({ number, isLast, onTabInLastCard, isNewest, onRemoveCard, 
               contentEditable={true}
               role="textbox"
               aria-multiline="true"
+              suppressContentEditableWarning={true}
               onFocus={setFocusAtEnd}
-
-            >
-            </div>
+              onBlur={(e) => onUpdateTerm(e.currentTarget.textContent || '')}
+            ></div>
             <div className='ec-info'>
               <h5 id='info-term'>TERM</h5>
               <h5>ENGLISH</h5>
@@ -108,10 +123,11 @@ function EditingCard({ number, isLast, onTabInLastCard, isNewest, onRemoveCard, 
               contentEditable={true}
               role="textbox"
               aria-multiline="true"
+              suppressContentEditableWarning={true}
               onFocus={setFocusAtEnd}
               onKeyDown={handleKeyDown}
-            >
-            </div>
+              onBlur={(e) => onUpdateDefinition(e.currentTarget.textContent || '')}
+            ></div>
             <div className='ec-info'>
               <h5>DEFINITION</h5>
               <h5>ENGLISH</h5>
@@ -119,11 +135,8 @@ function EditingCard({ number, isLast, onTabInLastCard, isNewest, onRemoveCard, 
           </div>
         </div>
       </div>
-
-
-
     </>
   )
 }
 
-export default EditingCard
+export default EditingCard;

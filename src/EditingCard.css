@@ -7,7 +7,6 @@
   border-radius: 5px;
   background-color: white;
   margin-bottom: 1rem;
-
 }
 
 .ec-toolbar {
@@ -90,5 +89,4 @@
 .ec-add-card:hover > p {
   color: rgb(255, 187, 0);
   border-bottom: 5px solid rgb(255, 187, 0);
-
 }
