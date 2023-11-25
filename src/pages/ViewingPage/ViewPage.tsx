@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Navigation from "./Navigation";
+import Navigation from "../../components/Navigation/Navigation";
 import './ViewingPage.css';
 import { AiFillEdit } from 'react-icons/ai';
 
@@ -12,12 +12,17 @@ export interface Card {
   definition: string;
 }
 
+/**
+ * ViewPage is a component for displaying and editing a list of flashcards.
+ * It allows users to view saved cards and make edits to them.
+ */
 const ViewPage: React.FC = () => {
   const [cards, setCards] = useState<Card[]>([]);
   const [editableCardId, setEditableCardId] = useState<number | null>(null);
   const termRef = useRef<HTMLDivElement>(null);
   const definitionRef = useRef<HTMLDivElement>(null);
 
+  // Loads saved cards from a file on component mount
   useEffect(() => {
     const filePath = path.join(window.require('os').homedir(), 'savedCards.json');
     if (fs.existsSync(filePath)) {
@@ -27,6 +32,10 @@ const ViewPage: React.FC = () => {
     }
   }, []);
 
+  /**
+   * Saves the updates made to a card.
+   * @param id The id of the card to be saved.
+   */
   const saveUpdatedCard = (id: number) => {
     const updatedTerm = termRef.current?.innerText;
     const updatedDefinition = definitionRef.current?.innerText;
@@ -44,11 +53,16 @@ const ViewPage: React.FC = () => {
 
     setCards(updatedCards);
 
-    // Save to file
+    // Save updated cards to file
     const filePath = path.join(window.require('os').homedir(), 'savedCards.json');
     fs.writeFileSync(filePath, JSON.stringify(updatedCards), 'utf-8');
   };
 
+  /**
+   * Handles the click event on the edit button of a card.
+   * Enables editing if clicked once and saves the card if clicked again.
+   * @param id The id of the card being edited.
+   */
   const handleEditClick = (id: number) => {
     if (editableCardId === id) {
       setEditableCardId(null);  // Toggle off

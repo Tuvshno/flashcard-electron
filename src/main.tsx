@@ -1,10 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
 import './index.css'
-import HomePage from './HomePage.tsx'
-import EditingPage from './EditingPage.tsx'
-import ViewPage from './ViewPage.tsx'
+import HomePage from './pages/HomePage/HomePage.tsx'
+import EditingPage from './pages/EditingPage/EditingPage.tsx'
+import ViewPage from './pages/ViewingPage/ViewPage.tsx'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 
