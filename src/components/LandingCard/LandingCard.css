@@ -1,0 +1,78 @@
+.flexBox, .cardContainer {
+  position: relative; 
+  justify-content: center;
+  border-radius: 16px;
+  background-color: #edefff;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 8px;
+  box-shadow: 0px 2px 8px 0px rgba(46, 56, 86, 0.08);
+  overflow: hidden; /* To handle the border-radius properly */
+  transition: all 0.3s ease; /* Transition for the card container */
+  cursor: pointer;
+}
+
+.cardContainer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0); /* Start with transparent */
+  border-radius: 16px;
+  transition: background-color 0.3s ease; /* Transition for the overlay */
+  pointer-events: none; /* Ensures the overlay doesn't interfere with clicking */
+}
+
+.cardContainer:hover::after {
+  background-color: var(--overlay-color, rgba(0, 0, 0, 0.5)); /* Example overlay color on hover */
+}
+
+.responsiveImage {
+  aspect-ratio: 2.33;
+  object-fit: contain;
+  object-position: center;
+  width: 100%;
+  overflow: hidden;
+}
+
+.cardContent {
+  display: flex;
+  margin-top: 22px;
+  flex-direction: column;
+  padding: 0 38px 0 16px;
+}
+
+.cardTitle, .cardDescription {
+  justify-content: center;
+  color: #1a1d28;
+  font: 400 13px/20px Inter, -apple-system, Roboto, Helvetica, sans-serif;
+  white-space: nowrap;
+}
+
+.cardTitle {
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 24px;
+}
+
+.cardDescription {
+  margin-top: 6px;
+}
+
+@media (max-width: 991px) {
+  .columns {
+    width: 100%;
+  }
+
+  .cardContent {
+    padding-right: 20px;
+  }
+
+  .cardTitle {
+    white-space: initial;
+  }
+}

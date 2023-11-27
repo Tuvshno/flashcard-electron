@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import EditingCard from '../../components/EditingCard/EditingCard';
 import '../../App.css';
 import './EditingPage.css';
@@ -15,7 +15,9 @@ const path = require('path');
  * It allows users to add, remove, and reorder cards, as well as to save the current set of cards.
  */
 function EditingPage() {
+  // Current list of cards
   const [cards, setCards] = useState<{ id: string, term: string, definition: string }[]>([{ id: '1', term: '', definition: '' }]);
+  const [title, setTitle] = useState<string>()
 
   // Generates a unique ID for new cards
   const generateUniqueID = () => Date.now().toString();
@@ -43,18 +45,30 @@ function EditingPage() {
 
   // Saves the current set of cards to a file
   const saveCards = () => {
+    console.log("in ")
     const userDataPath = app.getPath('userData');
     const cardsDirectory = path.join(userDataPath, 'StudySets');
     if (!fs.existsSync(cardsDirectory)) {
       fs.mkdirSync(cardsDirectory, { recursive: true });
     }
 
-    const timestamp = new Date().toISOString();
-    const filename = `savedCards-${timestamp}.json`;
-    const filePath = path.join(cardsDirectory, filename);
-
     try {
-      fs.writeFileSync(filePath, JSON.stringify(cards), 'utf-8');
+      if (!title) {
+        const timestamp = new Date().toISOString().replace(/:/g, '-');
+        const filename = `savedCards-${timestamp}.json`;
+        const filePath = path.join(cardsDirectory, filename);
+
+        fs.writeFileSync(filePath, JSON.stringify(cards), 'utf-8');
+        console.log(`wrote file to ${filePath}`)
+      }
+      else {
+        const filename = `${title}.json`;
+        const filePath = path.join(cardsDirectory, filename);
+
+        fs.writeFileSync(filePath, JSON.stringify(cards), 'utf-8');
+        console.log(`wrote file to ${filePath}`)
+      }
+
     } catch (err) {
       console.error('Error writing to file:', err);
     }
@@ -70,9 +84,28 @@ function EditingPage() {
     setCards(prevCards => prevCards.map(card => card.id === cardId ? { ...card, definition: updatedDefinition } : card));
   };
 
+  //Updates the title of the set
+  const handleTitleUpdate = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const newTitle = e.currentTarget.textContent || '';
+    setTitle(newTitle)
+  };
+
+  useEffect(() => {
+    saveCards()
+  }, [])
+
   return (
     <>
       <Navigation />
+      <div className='ep-container'>
+        <div className='ep-editable-box'
+          contentEditable={true}
+          role="textbox"
+          aria-multiline="true"
+          suppressContentEditableWarning={true}
+          onKeyDown={handleTitleUpdate}>
+        </div>
+      </div>
       <DndProvider backend={HTML5Backend}>
         <div className='editing-card-container'>
           {cards.map((card, index) => (
