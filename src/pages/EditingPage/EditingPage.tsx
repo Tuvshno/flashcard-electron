@@ -6,18 +6,23 @@ import Navigation from '../../components/Navigation/Navigation';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { app } from '@electron/remote';
+import { Link } from "react-router-dom";
 
 const fs = require('fs');
 const path = require('path');
+
+interface EditingPageProps {
+  initialTitleSet?: string;
+}
 
 /**
  * EditingPage is the main component for managing a collection of flashcards.
  * It allows users to add, remove, and reorder cards, as well as to save the current set of cards.
  */
-function EditingPage() {
+function EditingPage({ initialTitleSet }: EditingPageProps) {
   // Current list of cards
   const [cards, setCards] = useState<{ id: string, term: string, definition: string }[]>([{ id: '1', term: '', definition: '' }]);
-  const [title, setTitle] = useState<string>()
+  const [title, setTitle] = useState<string>('')
 
   // Generates a unique ID for new cards
   const generateUniqueID = () => Date.now().toString();
@@ -45,7 +50,6 @@ function EditingPage() {
 
   // Saves the current set of cards to a file
   const saveCards = () => {
-    console.log("in ")
     const userDataPath = app.getPath('userData');
     const cardsDirectory = path.join(userDataPath, 'StudySets');
     if (!fs.existsSync(cardsDirectory)) {
@@ -62,6 +66,7 @@ function EditingPage() {
         console.log(`wrote file to ${filePath}`)
       }
       else {
+        console.log(title)
         const filename = `${title}.json`;
         const filePath = path.join(cardsDirectory, filename);
 
@@ -85,13 +90,31 @@ function EditingPage() {
   };
 
   //Updates the title of the set
-  const handleTitleUpdate = (e: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleTitleUpdate = (e: React.FormEvent<HTMLDivElement>) => {
     const newTitle = e.currentTarget.textContent || '';
-    setTitle(newTitle)
+    setTitle(newTitle);
   };
 
+  //Initial Set up
   useEffect(() => {
-    saveCards()
+    if (initialTitleSet) {
+      setTitle(initialTitleSet);
+
+      const userDataPath = app.getPath('userData');
+      const cardsDirectory = path.join(userDataPath, 'StudySets');
+      const filePath = path.join(cardsDirectory, `${initialTitleSet}.json`);
+
+      if (fs.existsSync(filePath)) {
+        try {
+          const data = fs.readFileSync(filePath, 'utf-8');
+          const loadedCards = JSON.parse(data);
+
+          setCards(loadedCards);
+        } catch (err) {
+          console.error('Error reading the flashcard set file:', err);
+        }
+      }
+    }
   }, [])
 
   return (
@@ -103,7 +126,7 @@ function EditingPage() {
           role="textbox"
           aria-multiline="true"
           suppressContentEditableWarning={true}
-          onKeyDown={handleTitleUpdate}>
+          onInput={handleTitleUpdate}>
         </div>
       </div>
       <DndProvider backend={HTML5Backend}>
@@ -129,8 +152,9 @@ function EditingPage() {
           </div>
         </div>
       </DndProvider>
-
-      <button className='editing-create-button' onClick={saveCards}>Create</button>
+      <Link to={`/viewing/${encodeURIComponent(title)}`} style={{ textDecoration: 'none' }}>
+        <button className='editing-create-button' onClick={saveCards}>Create</button>
+      </Link>
     </>
   );
 }

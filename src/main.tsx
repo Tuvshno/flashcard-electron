@@ -13,7 +13,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/editing" element={<EditingPage />} />
-        <Route path="/viewing" element={<ViewPage />} />
+        <Route path="/viewing/:studySetTitle" element={<ViewPage />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,

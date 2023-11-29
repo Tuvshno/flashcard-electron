@@ -3,6 +3,9 @@ import Navigation from "../../components/Navigation/Navigation";
 import './ViewingPage.css';
 import { AiFillEdit } from 'react-icons/ai';
 
+import { useParams } from 'react-router-dom';
+import { app } from '@electron/remote';
+
 const fs = window.require('fs');
 const path = window.require('path');
 
@@ -21,10 +24,12 @@ const ViewPage: React.FC = () => {
   const [editableCardId, setEditableCardId] = useState<number | null>(null);
   const termRef = useRef<HTMLDivElement>(null);
   const definitionRef = useRef<HTMLDivElement>(null);
+  const { studySetTitle } = useParams();
 
   // Loads saved cards from a file on component mount
   useEffect(() => {
-    const filePath = path.join(window.require('os').homedir(), 'savedCards.json');
+    const userDataPath = app.getPath('userData');
+    const filePath = path.join(userDataPath, 'StudySets', `${studySetTitle}.json`);
     if (fs.existsSync(filePath)) {
       const fileContent = fs.readFileSync(filePath, 'utf-8');
       const savedCards: Card[] = JSON.parse(fileContent);
@@ -54,7 +59,7 @@ const ViewPage: React.FC = () => {
     setCards(updatedCards);
 
     // Save updated cards to file
-    const filePath = path.join(window.require('os').homedir(), 'savedCards.json');
+    const filePath = path.join(window.require('os').homedir(), `${studySetTitle}.json`);
     fs.writeFileSync(filePath, JSON.stringify(updatedCards), 'utf-8');
   };
 
