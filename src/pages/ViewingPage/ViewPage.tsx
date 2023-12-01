@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Navigation from "../../components/Navigation/Navigation";
 import './ViewingPage.css';
-import { AiFillEdit } from 'react-icons/ai';
+import { AiFillEdit, AiFillDelete } from 'react-icons/ai';
 
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { app } from '@electron/remote';
+import LandingCard from '../../components/LandingCard/LandingCard';
 
 const fs = window.require('fs');
 const path = window.require('path');
@@ -59,8 +60,7 @@ const ViewPage: React.FC = () => {
     setCards(updatedCards);
 
     // Save updated cards to file
-    const filePath = path.join(window.require('os').homedir(), `${studySetTitle}.json`);
-    fs.writeFileSync(filePath, JSON.stringify(updatedCards), 'utf-8');
+    saveCards()
   };
 
   /**
@@ -77,10 +77,53 @@ const ViewPage: React.FC = () => {
     }
   };
 
+  const handleDeleteClick = (id: number) => {
+    const updatedCards = cards.filter((card) => card.id !== id)
+
+    setCards(updatedCards);
+
+    const userDataPath = app.getPath('userData');
+    const cardsDirectory = path.join(userDataPath, 'StudySets');
+    const filePath = path.join(cardsDirectory, `${studySetTitle}.json`);
+    fs.writeFileSync(filePath, JSON.stringify(updatedCards), 'utf-8');
+
+  }
+
+  const saveCards = () => {
+    const userDataPath = app.getPath('userData');
+    const cardsDirectory = path.join(userDataPath, 'StudySets');
+    const filePath = path.join(cardsDirectory, `${studySetTitle}.json`);
+    fs.writeFileSync(filePath, JSON.stringify(cards), 'utf-8');
+
+    console.log(filePath)
+  }
+
   return (
     <>
       <Navigation />
       <div className="viewing-container">
+        <div>
+          {studySetTitle}
+        </div>
+
+        <div className="columns">
+          <div className="column">
+            <Link to="/editing" style={{ textDecoration: 'none' }}>
+              <LandingCard
+                title="Import Flashcard Set"
+                description="Get help generating an outline for your assigned topic"
+                overlayColor="rgba(255, 0, 0, 0.2)"
+              />
+            </Link>
+          </div>
+          <div className="column">
+            <LandingCard
+              title="Create Your Own"
+              description="Get help generating an outline for your assigned topic"
+              overlayColor="rgba(255, 0, 0, 0.3)" />
+          </div>
+        </div>
+
         {cards.map(card => (
           <div key={card.id} className="card">
             <div className="card-content">
@@ -98,10 +141,15 @@ const ViewPage: React.FC = () => {
                 <button onClick={() => handleEditClick(card.id)}>
                   <AiFillEdit className="viewing-edit" />
                 </button>
+                <button onClick={() => handleDeleteClick(card.id)}>
+                  <AiFillDelete className="viewing-edit" />
+                </button>
               </div>
             </div>
           </div>
         ))}
+
+        <button>Edit</button>
       </div>
     </>
   );
