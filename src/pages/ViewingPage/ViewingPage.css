@@ -1,9 +1,65 @@
-.viewing-container {
-  width: 70vw;
-  margin-top: 40px;
-  line-height: 1.625;
-  font-weight: 400;
+.viewing-box {
+  width: 100vw; /* Full width of the viewport */
+  height: 100vh; /* Full height of the viewport */
+  display: flex; /* Use flexbox */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  background-color: antiquewhite;
 }
+
+.viewing-container {
+  width: 45%; /* Container takes up 50% of the parent's width */
+  background-color: aqua;
+  margin: 20px; /* Margin for some space around the container */
+  padding: 20px; /* Padding inside the container */
+  border-radius: 10px; /* Optional: Rounded corners for aesthetics */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Box shadow for depth */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center children horizontally within the container */
+}
+
+.viewing-title {
+  text-align: left;
+  /* Align title to the left */
+  margin-bottom: 20px;
+  /* Add some margin below the title */
+}
+
+.viewing-study-options {
+  display: flex;
+  /* Use flexbox for horizontal layout */
+  gap: 20px;
+  /* Add space between buttons */
+  margin-top: 20px;
+  /* Margin on top of the options */
+  margin-bottom: 20px;
+  /* Margin at the bottom of the options */
+}
+
+.viewing-study-options button {
+  background-color: #f0f0f0;
+  /* Example button background color */
+  border: none;
+  /* Remove border */
+  padding: 10px 15px;
+  /* Padding inside the button */
+  border-radius: 5px;
+  /* Rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  /* Slight drop shadow */
+  cursor: pointer;
+  /* Cursor changes to pointer on hover */
+  transition: background-color 0.3s ease;
+  /* Smooth transition for button interaction */
+}
+
+.viewing-study-options button:hover {
+  background-color: #e0e0e0;
+  /* Slightly darker on hover */
+}
+
+
 
 .card {
   margin: 0;

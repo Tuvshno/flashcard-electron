@@ -101,55 +101,48 @@ const ViewPage: React.FC = () => {
   return (
     <>
       <Navigation />
-      <div className="viewing-container">
-        <div>
-          {studySetTitle}
-        </div>
-
-        <div className="columns">
-          <div className="column">
-            <Link to="/editing" style={{ textDecoration: 'none' }}>
-              <LandingCard
-                title="Import Flashcard Set"
-                description="Get help generating an outline for your assigned topic"
-                overlayColor="rgba(255, 0, 0, 0.2)"
-              />
-            </Link>
+      <div className='viewing-box'>
+        <div className="viewing-container">
+          <div className="viewing-title">
+            {studySetTitle}
           </div>
-          <div className="column">
-            <LandingCard
-              title="Create Your Own"
-              description="Get help generating an outline for your assigned topic"
-              overlayColor="rgba(255, 0, 0, 0.3)" />
-          </div>
-        </div>
 
-        {cards.map(card => (
-          <div key={card.id} className="card">
-            <div className="card-content">
-              <div className="term">
-                {editableCardId === card.id ?
-                  <div ref={termRef} contentEditable={true} className="editable-box">{card.term}</div> :
-                  <div className="editable-box-view">{card.term}</div>}
-              </div>
-              <div className="definition">
-                {editableCardId === card.id ?
-                  <div ref={definitionRef} contentEditable={true} className="editable-box">{card.definition}</div> :
-                  <div className="editable-box-view">{card.definition}</div>}
-              </div>
-              <div className='buttons'>
-                <button onClick={() => handleEditClick(card.id)}>
-                  <AiFillEdit className="viewing-edit" />
-                </button>
-                <button onClick={() => handleDeleteClick(card.id)}>
-                  <AiFillDelete className="viewing-edit" />
-                </button>
+          <div className='viewing-study-options'>
+            <button>Flashcards</button>
+            <button>Learn</button>
+            <button>Test</button>
+            <button>Match</button>
+          </div>
+
+          {cards.map(card => (
+            <div key={card.id} className="card">
+              <div className="card-content">
+                <div className="term">
+                  {editableCardId === card.id ?
+                    <div ref={termRef} contentEditable={true} className="editable-box">{card.term}</div> :
+                    <div className="editable-box-view">{card.term}</div>}
+                </div>
+                <div className="definition">
+                  {editableCardId === card.id ?
+                    <div ref={definitionRef} contentEditable={true} className="editable-box">{card.definition}</div> :
+                    <div className="editable-box-view">{card.definition}</div>}
+                </div>
+                <div className='buttons'>
+                  <button onClick={() => handleEditClick(card.id)}>
+                    <AiFillEdit className="viewing-edit" />
+                  </button>
+                  <button onClick={() => handleDeleteClick(card.id)}>
+                    <AiFillDelete className="viewing-edit" />
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
 
-        <button>Edit</button>
+          <button>Edit</button>
+        </div>
+
+
       </div>
     </>
   );
