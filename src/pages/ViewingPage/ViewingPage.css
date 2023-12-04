@@ -1,19 +1,15 @@
 .viewing-box {
-  width: 100vw; /* Full width of the viewport */
-  height: 100vh; /* Full height of the viewport */
   display: flex; /* Use flexbox */
   justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  background-color: antiquewhite;
+  /* background-color: antiquewhite; */
 }
 
 .viewing-container {
   width: 45%; /* Container takes up 50% of the parent's width */
-  background-color: aqua;
+  /* background-color: aqua; */
   margin: 20px; /* Margin for some space around the container */
   padding: 20px; /* Padding inside the container */
   border-radius: 10px; /* Optional: Rounded corners for aesthetics */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Box shadow for depth */
   display: flex;
   flex-direction: column;
   align-items: center; /* Center children horizontally within the container */
@@ -69,6 +65,8 @@
   padding: 15px;
   border-radius: 5px;
   background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Optional: Box shadow for depth */
+
   margin-bottom: 1rem;
 }
 

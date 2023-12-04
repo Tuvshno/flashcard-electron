@@ -7,6 +7,7 @@ import './HomePage.css';
 
 import { app } from '@electron/remote';
 import { useEffect, useState } from "react";
+import FileTree from "../../Utilities/FileTree";
 
 const fs = require('fs');
 const path = require('path');
@@ -32,10 +33,42 @@ function HomePage() {
       
     });
   }, []);
-
+  var sampleTreeStructure = {
+    "name": "src",
+    "fullpath": "/project/src",
+    "type": "folder",
+    "files": [
+        {
+            "name": "index.html",
+            "fullpath": "/project/src/index.html",
+            "type": "file",
+            "filetype": "html"
+        },
+        {
+          "name": "main.css",
+          "fullpath": "/project/src/main.css",
+          "type": "file",
+          "filetype": "css"
+        },
+        {
+          "name": "pages",
+          "fullpath": "/project/src/pages",
+          "type": "folder",
+          "files": [
+            {
+              "name": "about.html",
+              "fullpath": "/project/src/pages/about.html",
+              "type": "file",
+              "filetype": "html"
+            }
+          ]
+        }
+    ]
+}
   return (
     <div>
       <Navigation />
+      <FileTree file={sampleTreeStructure}/>
       <div className="columns">
         <div className="column">
           <Link to="/editing" style={{ textDecoration: 'none' }}>

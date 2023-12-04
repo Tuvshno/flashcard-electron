@@ -100,7 +100,6 @@ const ViewPage: React.FC = () => {
 
   return (
     <>
-      <Navigation />
       <div className='viewing-box'>
         <div className="viewing-container">
           <div className="viewing-title">
