@@ -1,0 +1,3 @@
+[submodule "yt-twitch-fuser/yt-twitch-fuser/Version2"]
+	path = yt-twitch-fuser/yt-twitch-fuser/Version2
+	url = https://github.com/Tuvshno/chat-fuser.git
